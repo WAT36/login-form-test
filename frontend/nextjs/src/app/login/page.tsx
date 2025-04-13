@@ -7,6 +7,7 @@ import {
   CognitoUserSession,
 } from "amazon-cognito-identity-js";
 import { userPool } from "../../lib/cognito";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -15,6 +16,8 @@ export default function LoginPage() {
   const [showNewPasswordForm, setShowNewPasswordForm] = useState(false);
   const [cognitoUser, setCognitoUser] = useState<CognitoUser | null>(null);
   const [message, setMessage] = useState("");
+
+  const router = useRouter();
 
   const handleLogin = () => {
     const user = new CognitoUser({
@@ -31,6 +34,8 @@ export default function LoginPage() {
       onSuccess: (result: CognitoUserSession) => {
         setMessage("ログイン成功！");
         console.log("ID Token:", result.getIdToken().getJwtToken());
+        localStorage.setItem("idToken", result.getIdToken().getJwtToken());
+        router.push("/mypage"); // マイページへ遷移
       },
       onFailure: (err) => {
         console.error("ログイン失敗:", err);
@@ -56,6 +61,8 @@ export default function LoginPage() {
           setMessage("パスワード変更＆ログイン成功！");
           console.log("ID Token:", result.getIdToken().getJwtToken());
           setShowNewPasswordForm(false);
+          localStorage.setItem("idToken", result.getIdToken().getJwtToken());
+          router.push("/mypage");
         },
         onFailure: (err) => {
           console.error("パスワード変更失敗:", err);
