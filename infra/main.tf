@@ -6,14 +6,7 @@ provider "aws" {
 resource "aws_cognito_user_pool" "main" {
   name = "login-form-test-pool"
 
-  auto_verified_attributes = ["email"]
-
-  schema {
-    name     = "email"
-    required = true
-    attribute_data_type = "String"
-    mutable  = true
-  }
+  username_attributes = [] # 空にすることで username のみを使用
 
   password_policy {
     minimum_length    = 8
@@ -33,12 +26,11 @@ resource "aws_cognito_user_pool_client" "main" {
 
   generate_secret = false
 
-  allowed_oauth_flows                  = ["code"]
-  allowed_oauth_scopes                = ["email", "openid", "profile"]
-  allowed_oauth_flows_user_pool_client = true
-
-  callback_urls = ["https://example.com/callback"] # 適宜変更
-  logout_urls   = ["https://example.com/logout"]   # 適宜変更
+  explicit_auth_flows = [
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH"
+  ]
 
   supported_identity_providers = ["COGNITO"]
 }
