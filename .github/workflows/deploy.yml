@@ -22,9 +22,11 @@ jobs:
         run: cd frontend/nextjs && npm install
 
       - name: 静的ファイル出力
-        run: |
-          export GITHUB_PAGES=true
-          cd frontend/nextjs && npm run deploy
+        env:
+          GITHUB_PAGES: true
+          NEXT_PUBLIC_USERPOOL_ID: ${{ secrets.NEXT_PUBLIC_USERPOOL_ID }}
+          NEXT_PUBLIC_APPCLIENT_ID: ${{ secrets.NEXT_PUBLIC_APPCLIENT_ID }}
+        run: cd frontend/nextjs && npm run deploy
 
       - name: GitHub Pages にデプロイ
         uses: peaceiris/actions-gh-pages@v3
