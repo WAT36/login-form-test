@@ -59,7 +59,6 @@ export default function LoginPage() {
       {
         onSuccess: (result) => {
           setMessage("パスワード変更＆ログイン成功！");
-          console.log("ID Token:", result.getIdToken().getJwtToken());
           setShowNewPasswordForm(false);
           localStorage.setItem("idToken", result.getIdToken().getJwtToken());
           router.push("/mypage");
