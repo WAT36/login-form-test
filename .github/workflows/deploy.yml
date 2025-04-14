@@ -19,7 +19,7 @@ jobs:
           node-version: 18
 
       - name: 依存関係インストール
-        run: npm install
+        run: cd frontend/nextjs && npm install
 
       - name: 静的ファイル出力
         run: |
